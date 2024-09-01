@@ -2,7 +2,7 @@ import express from 'express';
 import http from 'http';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import setupSocket from './socket.js';
+import { Server } from 'socket.io';
 
 dotenv.config();
 
@@ -12,11 +12,22 @@ const server = http.createServer(app);
 
 // CORS policy setup
 const corsOptions = {
-  origin: true, // Allow all origins
+  origin: 'https://chat-box-frontend-sigma.vercel.app', // Your frontend URL
   credentials: true,
 };
 
 app.use(cors(corsOptions));
+
+// Initialize Socket.IO
+const io = new Server(server, {
+  cors: corsOptions,
+});
+
+// Socket.IO connection event
+io.on('connection', (socket) => {
+  console.log('A user connected');
+  // Your socket event handlers
+});
 
 // Middleware to parse JSON
 app.use(express.json());
@@ -48,15 +59,6 @@ app.use((err, req, res, next) => {
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Something broke!');
-});
-
-// Set up Socket.IO
-setupSocket(server);
-
-// Start the server
-const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
 });
 
 export { app, server };
