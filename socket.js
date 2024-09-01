@@ -3,7 +3,7 @@ import { Server as WebSocketServer } from 'socket.io';
 const setupSocket = (server) => {
     const io = new WebSocketServer(server, {
         cors: {
-            origin: "http://localhost:5173", // Replace with your frontend URL
+            origin: ["http://localhost:5173","//chat-box-frontend-sigma.vercel.app/"],// Replace with your frontend URL
             methods: ["GET", "POST"],
         },
     });
