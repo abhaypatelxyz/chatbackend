@@ -1,7 +1,6 @@
 import { app, server } from './app.js';
 import connectDB from './config/mongoDB.js';
-
-// server.js
+import setupSocket from './socket.js';
 import dotenv from 'dotenv';
 import winston from 'winston';
 import mongoose from 'mongoose';
@@ -23,9 +22,12 @@ const logger = winston.createLogger({
 
 const port = process.env.PORT || 3000;
 
+// Setup WebSocket
+setupSocket(server);
+
 connectDB()
   .then(() => {
-    app.listen(port, () => {
+    server.listen(port, () => {
       logger.info(`Server is running at port: ${port}`);
     });
   })
@@ -44,7 +46,7 @@ process.on('unhandledRejection', (reason, promise) => {
 const shutdown = (signal) => {
   process.on(signal, () => {
     logger.info(`Received ${signal}. Shutting down gracefully...`);
-    app.close(() => {
+    server.close(() => {
       logger.info('HTTP server closed.');
       mongoose.connection.close(false, () => {
         logger.info('MongoDB connection closed.');

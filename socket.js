@@ -3,13 +3,9 @@ import { Server as WebSocketServer } from 'socket.io';
 const setupSocket = (server) => {
     const io = new WebSocketServer(server, {
         cors: {
-            origin: [
-                "http://localhost:5173",  // Local development
-                "https://chat-box-frontend-sigma.vercel.app"  // Production frontend
-            ],
+            origin: ["http://localhost:5173", 'https://chat-box-frontend-sigma.vercel.app/'],// Local frontend origin
             methods: ["GET", "POST"],
-            allowedHeaders: ["my-custom-header"], // Optional: Add headers if needed
-            credentials: true // Optional: Allow credentials
+            credentials: true // Allow credentials (cookies, authorization headers, etc.)
         },
     });
 
