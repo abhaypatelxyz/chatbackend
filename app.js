@@ -7,21 +7,21 @@ const app = express();
 const server = http.createServer(app);
 
 // CORS policy setup
-const allowedOrigins = [
-  'https://www.bharatlinker.shop',
-  'http://localhost:5173'
-];
-
+// CORS policy setup to allow all origins
 const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: true, // Allow all origins
   credentials: true,
 };
+// const corsOptions = {
+//   origin: function (origin, callback) {
+//     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error('Not allowed by CORS'));
+//     }
+//   },
+//   credentials: true,
+// };
 
 app.use(cors(corsOptions));
 
