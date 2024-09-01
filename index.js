@@ -1,8 +1,5 @@
 import { app, server } from './app.js';
 import connectDB from './config/mongoDB.js';
-import setupSocket from './socket.js';
-
-setupSocket(server); // Setup Socket.IO with the server instance
 
 // server.js
 import dotenv from 'dotenv';

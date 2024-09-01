@@ -2,29 +2,19 @@ import express from 'express';
 import http from 'http';
 import cors from 'cors';
 import dotenv from 'dotenv';
-
+import setupSocket from './socket.js';
 
 dotenv.config();
+
 // Create Express app
 const app = express();
 const server = http.createServer(app);
 
 // CORS policy setup
-// CORS policy setup to allow all origins
 const corsOptions = {
   origin: true, // Allow all origins
   credentials: true,
 };
-// const corsOptions = {
-//   origin: function (origin, callback) {
-//     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error('Not allowed by CORS'));
-//     }
-//   },
-//   credentials: true,
-// };
 
 app.use(cors(corsOptions));
 
@@ -49,7 +39,6 @@ app.use('/api', friendRouter);
 // Middleware to handle JSON parsing errors
 app.use((err, req, res, next) => {
   if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
-    // Bad request due to invalid JSON
     return res.status(400).json({ message: "Invalid JSON" });
   }
   next();
@@ -59,6 +48,15 @@ app.use((err, req, res, next) => {
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Something broke!');
+});
+
+// Set up Socket.IO
+setupSocket(server);
+
+// Start the server
+const PORT = process.env.PORT || 5000;
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
 
 export { app, server };
