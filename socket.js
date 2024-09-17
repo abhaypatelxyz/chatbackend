@@ -4,7 +4,7 @@ const setupSocket = (server) => {
     const io = new WebSocketServer(server, {
         cors: {
             // origin: "https://chat-box-frontend-sigma.vercel.app/",
-            origin: "http://localhost:5173",
+            origin: "https://chat-box-frontend-sigma.vercel.app",
             methods: ["GET", "POST"],
             credentials: true // Allow credentials (cookies, authorization headers, etc.)
         },
