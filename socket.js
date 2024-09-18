@@ -3,7 +3,7 @@ import { Server as WebSocketServer } from 'socket.io';
 const setupSocket = (server) => {
     const io = new WebSocketServer(server, {
         cors: {
-            origin: "https://vercel.com/shubhamdas-iit-dhanbads-projects",
+            origin: "http://localhost:5173",
             methods: ["GET", "POST"],
             credentials: true // Allow credentials (cookies, authorization headers, etc.)
         },
