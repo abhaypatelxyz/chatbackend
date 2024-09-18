@@ -11,7 +11,7 @@ const server = http.createServer(app);
 
 const corsOptions = {
   // origin: "https://chat-box-frontend-sigma.vercel.app/",
-  origin: "http://localhost:5173",
+  origin: "https://chat-box-frontend-sigma.vercel.app",
   methods: ["GET", "POST"],
   credentials: true, // Allow credentials (cookies, authorization headers, etc.)
 };
