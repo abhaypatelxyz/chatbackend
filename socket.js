@@ -3,7 +3,7 @@ import { Server as WebSocketServer } from 'socket.io';
 const setupSocket = (server) => {
     const io = new WebSocketServer(server, {
         cors: {
-            origin: "https://chat-box-frontend-sigma.vercel.app",
+            origin: "https://swiftchat-rouge.vercel.app",
             methods: ["GET", "POST"],
             credentials: true // Allow credentials (cookies, authorization headers, etc.)
         },
