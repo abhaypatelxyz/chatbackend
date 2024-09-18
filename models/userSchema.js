@@ -43,6 +43,10 @@ const userSchema = new Schema(
         userName: {
             type: String
         },
+        online:{
+            type:Boolean,
+            default:false
+        },
         firstName: {
             type: String,
         },

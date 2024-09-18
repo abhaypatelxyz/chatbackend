@@ -51,30 +51,36 @@ const registerUser = async (req, res) => {
 
 const userData = async (req, res) => {
   try {
-    const uid = req.query.uid;
-    const socketId = req.query.socketId;
+    const { uid, socketId } = req.query; // Destructure uid and socketId from query parameters
+
     if (!uid) {
       return res.status(400).send('ID is required');
     }
 
+    // Find the user by ID
     const user = await User.findOne({ uid });
 
     if (!user) {
       return res.status(404).send('User not found');
     }
 
+    // Update the user with the new socketId and set online status to true
     const updatedUser = await User.findOneAndUpdate(
       { uid },
-      { socketId },
-      { new: true, runValidators: true }
+      { socketId, online: true }, // Update both socketId and online status
+      { new: true, runValidators: true } // Return the updated user and run validators
     );
 
-    res.json(updatedUser);
+    // Log and send the updated user data
+    
+    res.json(updatedUser); // Send the updated user data as the response
   } catch (error) {
     console.error("Error fetching user data:", error);
     res.status(500).send('Server error: ' + error.message);
   }
 };
+
+
 
 const contactData = async (req, res) => {
   try {
@@ -89,6 +95,7 @@ const contactData = async (req, res) => {
       firstName: user.firstName,
       socketId: user.socketId,
       userName: user.userName,
+      online: user.online,
       _id: user._id,
     });
   } catch (error) {
@@ -96,7 +103,6 @@ const contactData = async (req, res) => {
     res.status(500).send('Server error: ' + error.message);
   }
 };
-
 const updateData = async (req, res) => {
   try {
     const uid = req.query.uid;
@@ -105,16 +111,24 @@ const updateData = async (req, res) => {
       return res.status(400).send('ID is required');
     }
 
+    // Find the user by uid
     const user = await User.findOne({ uid });
 
     if (!user) {
       return res.status(404).send('User not found');
     }
 
+    // Update user with socketId and set online status to true
     const updatedUser = await User.findOneAndUpdate(
       { uid },
-      { socketId },
-      { new: true, runValidators: true }
+      { 
+        socketId,
+        online: true  // Set the online status to true
+      },
+      { 
+        new: true, 
+        runValidators: true 
+      }
     );
 
     res.json(updatedUser);
@@ -123,6 +137,7 @@ const updateData = async (req, res) => {
     res.status(500).send('Server error: ' + error.message);
   }
 };
+
 
 const userNameData = async (req, res) => {
   const userName = req.query.userName;
@@ -154,4 +169,39 @@ const userNameData = async (req, res) => {
   }
 };
 
-export { registerUser, userData, contactData, updateData, userNameData };
+
+
+const updateOnlineStatus = async (req, res) => {
+  try {
+    const uid  = req.query.uid; // Destructure uid from query parameters
+    console.log("shubham");
+    if (!uid) {
+      return res.status(400).json({ message: 'User ID is required' });
+    }
+
+    // Log the UID for debugging purposes
+    console.log('Received UID:', uid);
+
+    // Find the user by ID and set the online status to false
+    const user = await User.findOneAndUpdate(
+      { uid },
+      { online: false }, // Explicitly set online status to false
+      { new: true, runValidators: true } // Return the updated user
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json({ message: 'Online status updated to false', user });
+  } catch (error) {
+    console.error('Error updating online status:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
+
+
+
+export { registerUser, userData, contactData, updateData, userNameData,updateOnlineStatus };
